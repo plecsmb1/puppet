@@ -1,0 +1,21 @@
+#!/bin/sh
+
+while [ $# -gt 0 ] 
+	do
+	
+
+	SAFENAME=`echo $1 | tr '-' '_'`
+
+        ALREADY_EXISTS=`egrep "::package::${SAFENAME} " package.pp`
+
+	
+	if [ -n "${ALREADY_EXISTS}" ] 
+		then
+		echo "$1 is already in package.pp, skipping."
+	else
+		echo "class apl::package::$SAFENAME { package { '$1': ensure => latest, } } "  | tee -a package.pp
+	fi 
+
+	shift
+
+	done
